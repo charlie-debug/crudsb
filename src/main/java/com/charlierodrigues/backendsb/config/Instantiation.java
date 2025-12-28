@@ -1,26 +1,39 @@
 package com.charlierodrigues.backendsb.config;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import com.charlierodrigues.backendsb.domain.Post;
 import com.charlierodrigues.backendsb.domain.User;
+import com.charlierodrigues.backendsb.repository.PostRepository;
 import com.charlierodrigues.backendsb.repository.UserRepository;
 @Configuration
 public class Instantiation implements CommandLineRunner {
    
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private  PostRepository postRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
 		userRepository.deleteAll();
 		User charlie = new User(null, "charlie", "charlie@gmail.com");
 		User giovana = new User(null, "giovana","giovana@gmail.com" );
 		User lucia = new User(null, "lucia", "lucia@gmail.com");
 		userRepository.saveAll(Arrays.asList(charlie,giovana,lucia));
-		
+		postRepository.deleteAll();
+		Post post1 = new Post(null, sdf.parse("28/12/2025"), "partiu viagem", "Vou para Nova Zelândia!", charlie);
+		Post post2 = new Post(null, sdf.parse("25/12/2025"), "Bom dia!", "Hoje é dia de fazer caminhada...", lucia);
+		postRepository.saveAll(Arrays.asList(post1,post2));
 	}
 
 }
