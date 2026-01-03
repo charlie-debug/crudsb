@@ -1,5 +1,6 @@
 package com.charlierodrigues.backendsb.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,11 @@ public class PostService {
 		return post.orElseThrow(()-> new ObjectNotFoundException("post não encontrado!"));
 	}
 	public List<Post>findByTitle(String text){
-		return repo.searchTitle(text);
-		
+		return repo.searchTitle(text);		
 		
 	}
+	public List<Post> fullSearch(String text, Date minDate, Date maxDate){
+		maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 *1000);
+		return repo.fullSearch(text, minDate, maxDate);		
+	}	
 }
